@@ -2,6 +2,11 @@ const express = require("express");
 const tourRouter = express.Router();
 const tourController = require("../controller/tourController");
 
+tourRouter
+  .route("/")
+  .get(tourController.getAllTours)
+  .post(tourController.addTours);
+
 tourRouter.use(
   "/best-3-tours",
   (req, res, next) => {
@@ -11,11 +16,6 @@ tourRouter.use(
   },
   tourController.getAllTours
 );
-
-tourRouter
-  .route("/")
-  .get(tourController.getAllTours)
-  .post(tourController.addTours);
 
 tourRouter.route("/stats").get(tourController.tourStats);
 

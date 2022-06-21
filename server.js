@@ -10,7 +10,7 @@ mongoose.connect(
     console.log("node connected to DB");
   },
   () => {
-    console.log("hatto URL");
+    console.log("hatto URL, DB ishlagani yuq");
   }
 );
 

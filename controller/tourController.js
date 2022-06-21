@@ -27,7 +27,8 @@ const getAllTours = async (req, res) => {
 const addTours = async (req, res) => {
   try {
     const data = req.body;
-    const tour = await tourModel.create(body);
+    // console.log(data);
+    const tour = await tourModel.create(data);
     res.status(201).json({
       status: "sucess",
       data: tour,

@@ -20,4 +20,12 @@ app.use("/api/v1/tours", (req, res, next) => {
   next();
 });
 
+app.all("*", (req, res, next) => {
+  res.status(404).json({
+    status: "failed",
+    message: "hato url yozdis",
+  });
+  next();
+});
+
 module.exports = app;
