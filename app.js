@@ -3,7 +3,8 @@ const app = express();
 const morgan = require("morgan");
 const tourRouter = require("./routes/tourRouter");
 const userRouter = require("./routes/userRouter");
-
+const AppError = require("./helper/appError");
+const errorController = require("./controller/errorController");
 app.use(express.json());
 
 app.use(morgan("dev"));
@@ -20,26 +21,11 @@ app.use("/api/v1/tours", (req, res, next) => {
 });
 
 app.all("*", (req, res, next) => {
-  const err = {
-    stasusCode: 404,
-    status: "fail",
-    message: `this url is not found ${req.originalUrl}`,
-  };
-  next(err);
+  next(new AppError("this page not founddd"), 404);
 });
 
 // Global error handlings
 
-app.use((err, req, res, next) => {
-  err.stasusCode = err.statusCode || 404;
-  err.status = err.status || "fail";
-  err.message = err.message || "Not found";
-
-  res.status(err.stasusCode).json({
-    status: err.status,
-    message: err.message,
-  });
-  next();
-});
+app.use(errorController);
 
 module.exports = app;
