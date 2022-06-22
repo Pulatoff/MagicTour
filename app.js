@@ -3,7 +3,6 @@ const app = express();
 const morgan = require("morgan");
 const tourRouter = require("./routes/tourRouter");
 const userRouter = require("./routes/userRouter");
-// express bn server yaratish
 
 app.use(express.json());
 
@@ -21,9 +20,24 @@ app.use("/api/v1/tours", (req, res, next) => {
 });
 
 app.all("*", (req, res, next) => {
-  res.status(404).json({
-    status: "failed",
-    message: "hato url yozdis",
+  const err = {
+    stasusCode: 404,
+    status: "fail",
+    message: `this url is not found ${req.originalUrl}`,
+  };
+  next(err);
+});
+
+// Global error handlings
+
+app.use((err, req, res, next) => {
+  err.stasusCode = err.statusCode || 404;
+  err.status = err.status || "fail";
+  err.message = err.message || "Not found";
+
+  res.status(err.stasusCode).json({
+    status: err.status,
+    message: err.message,
   });
   next();
 });
