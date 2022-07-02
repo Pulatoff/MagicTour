@@ -2,6 +2,7 @@ module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 404;
   err.status = err.status || "fail";
   err.message = err.message || "Not found";
+  console.log(err.stack);
   if (process.env.NODE_ENV === "DEVELOPMENT") {
     res.status(err.statusCode).json({
       message: err.message,

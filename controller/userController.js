@@ -1,12 +1,13 @@
-const tourModel = require("../model/userModel");
+const User = require("../model/userModel");
+const catchErrorAsync = require("../helper/catchAsync");
 
-async function getUsers(req, res) {
-  try {
-    res.status(200).json({
-      message: "halli tayor emas",
-    });
-  } catch (e) {}
-}
+const getUsers = catchErrorAsync(async (req, res) => {
+  const users = await User.find();
+  res.status(200).json({
+    status: "sucess",
+    data: users,
+  });
+});
 
 async function addUser(req, res) {
   try {
