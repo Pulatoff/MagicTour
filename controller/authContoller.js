@@ -117,7 +117,6 @@ const resetPassword = catchErrorAsync(async (req, res, next) => {
     resetTokenHash: hashToken,
     resetTokenVaqti: { $gt: Date.now() },
   });
-  console.log(user);
   if (!user) {
     user.resetTokenHash = undefined;
     user.resetTokenVaqti = undefined;

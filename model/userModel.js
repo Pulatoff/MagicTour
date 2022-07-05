@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "You must enter password!"],
     minlength: [8, "You must enter at least 8 character!"],
+    select: false,
   },
   passwordConfirm: {
     type: String,
@@ -42,6 +43,11 @@ const userSchema = new mongoose.Schema({
   passwordChangeDate: {
     type: Date,
     default: null,
+  },
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
   },
   resetTokenHash: String,
   resetTokenVaqti: Date,
@@ -65,6 +71,11 @@ userSchema.methods.hashTokenMethod = function () {
 
   return token;
 };
+
+userSchema.pre(/^find/, async function (next) {
+  await this.find({ active: { $ne: false } });
+  next();
+});
 
 const User = mongoose.model("users", userSchema);
 
