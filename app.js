@@ -11,6 +11,10 @@ app.use(morgan("dev"));
 
 app.use(express.static("public"));
 
+app.use("/api", (req, res, next) => {
+  res.cookie("jwt", res);
+});
+
 app.use("/api/v1/tours", tourRouter);
 
 app.use("/api/v1/users", userRouter);

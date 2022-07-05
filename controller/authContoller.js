@@ -6,6 +6,16 @@ const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const mail = require("../helper/mail");
 
+const cookieOptions = {
+  expires: new Date(
+    Date.now() + process.env.JWT_COOKIES_EXPIRESIN * 24 * 60 * 60 * 1000
+  ),
+};
+
+const saveTokenCookie = (res, token) => {
+  res.cookie("jwt", token, cookieOptions);
+};
+
 const signup = catchErrorAsync(async (req, res, next) => {
   console.log(req.body);
   const newUser = await User.create({
@@ -18,6 +28,7 @@ const signup = catchErrorAsync(async (req, res, next) => {
   const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
+  saveTokenCookie(res, token);
 
   res.status(201).json({
     status: "success",
@@ -87,6 +98,7 @@ const forgotPassword = catchErrorAsync(async (req, res, next) => {
   }
 
   const token = user.hashTokenMethod();
+  saveTokenCookie(res, token);
   await user.save({ validateBeforeSave: false });
 
   const resetLink = `${req.protocol}://${req.get(
