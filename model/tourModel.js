@@ -2,6 +2,42 @@ const mongoose = require("mongoose");
 
 const tourSchema = new mongoose.Schema(
   {
+    startLocation: {
+      description: {
+        type: String,
+        required: true,
+      },
+      type: {
+        type: String,
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+      },
+      address: {
+        type: String,
+        required: true,
+      },
+    },
+    locations: [
+      {
+        description: {
+          type: String,
+          required: true,
+        },
+        type: {
+          type: String,
+          default: "Point",
+        },
+        coordinates: {
+          type: [Number],
+        },
+        day: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
     name: {
       type: String,
       required: true,
@@ -64,6 +100,12 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "users",
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
@@ -75,6 +117,11 @@ tourSchema.virtual("HaftaDavomEtish").get(function () {
   return this.duration / 7;
 });
 
+tourSchema.virtual("reviews", {
+  ref: "reviews",
+  localField: "_id",
+  foreignField: "tour",
+});
 // DOCUMENT MiddleWare
 tourSchema.pre("save", function (next) {
   this.name = this.name + 1;

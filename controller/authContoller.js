@@ -6,8 +6,6 @@ const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const mail = require("../helper/mail");
 
-const cookieOptions = 1;
-
 const saveTokenCookie = (token, res, req) => {
   res.cookie("jwt", token, {
     maxAge: process.env.JWT_COOKIES_EXPIRESIN * 24 * 60 * 60 * 1000,

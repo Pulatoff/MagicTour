@@ -9,7 +9,8 @@ const getAllTours = catchErrorAsync(async (req, res) => {
     .field()
     .pagination();
 
-  const tours = await allQuery.dbQuery;
+  const tours = allQuery.dbQuery;
+  const data = await tours.find().populate("guides").populate("reviews");
 
   res.status(200).json({
     status: "sucess",

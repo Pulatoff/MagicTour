@@ -3,12 +3,15 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
 const Tour = require("../../model/tourModel");
-
+const User = require("../../model/userModel");
+const Review = require("../../model/reviewModel");
 console.log(process.env.DB);
 
 const DB = process.env.DB.replace("<password>", process.env.PASSWORD);
-const data = JSON.parse(
-  fs.readFileSync(`${__dirname}/tours-simple.json`, "utf-8")
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, "utf-8"));
+const users = JSON.parse(fs.readFileSync(`${__dirname}/users.json`, "utf-8"));
+const reviews = JSON.parse(
+  fs.readFileSync(`${__dirname}/reviews.json`, "utf-8")
 );
 
 mongoose.connect(
@@ -23,7 +26,9 @@ mongoose.connect(
 
 async function addModel() {
   try {
-    const dataBit = await Tour.create(data);
+    await Tour.create(tours);
+    await User.create(users);
+    await Review.create(reviews);
     console.log("data writed to DB");
   } catch (e) {
     console.log("data don't writed to DB" + e);
@@ -32,17 +37,17 @@ async function addModel() {
 
 async function removeModel() {
   try {
-    const deleteD = await Tour.deleteMany();
+    await Tour.deleteMany();
+    await User.deleteMany();
+    await Review.deleteMany();
     console.log("data removed to DB");
   } catch (e) {
     console.log("data don't removed to DB");
   }
 }
 
-if (process.argv[2] === "--add") {
-  addModel();
-} else if (process[2] === "--remove") {
-  removeModel();
-}
+addModel();
+
+//removeModel();
 
 console.log(process.argv);
