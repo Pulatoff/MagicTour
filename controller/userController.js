@@ -2,47 +2,28 @@ const User = require("../model/userModel");
 const catchErrorAsync = require("../helper/catchAsync");
 const bcrypt = require("bcryptjs");
 const AppError = require("../helper/appError");
+const handler = require("./handlerController");
 const jwt = require("jsonwebtoken");
 
-const getUsers = catchErrorAsync(async (req, res) => {
-  const users = await User.find();
-  res.status(200).json({
-    status: "sucess",
-    data: users,
-  });
-});
+const getUsers = (req, res, next) => {
+  handler.getAll(req, res, next, User);
+};
 
-const addUser = catchErrorAsync(async (req, res, next) => {
-  const user = await User.findById(req.params.id);
-  if (!user) {
-    return next(new AppError("Bunday user mavjud emas", 404));
-  }
-  res.status(201).json({
-    status: "success",
-    data: user,
-  });
-});
-async function deleteUser(req, res) {
-  try {
-    res.status(200).json({
-      message: "halli tayor emas",
-    });
-  } catch (e) {}
-}
-async function updateUser(req, res) {
-  try {
-    res.status(200).json({
-      message: "halli tayor emas",
-    });
-  } catch (e) {}
-}
-async function getUser(req, res) {
-  try {
-    res.status(200).json({
-      message: "halli tayor emas",
-    });
-  } catch (e) {}
-}
+const addUser = (req, res, next) => {
+  handler.add(req, res, next, User);
+};
+
+const updateUser = (req, res, next) => {
+  handler.update(req, res, next, User);
+};
+
+const deleteUser = (req, res, next) => {
+  handler.delete(req, res, next, User);
+};
+
+const getUser = (req, res) => {
+  handler.getOne(req, res, next, User);
+};
 
 const updateMePassword = catchErrorAsync(async (req, res, next) => {
   // 1) Eski passwordni bilish kerak

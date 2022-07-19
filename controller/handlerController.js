@@ -17,23 +17,13 @@ const response = (res, statusCode, data) => {
 };
 
 exports.getAll = catchErrorAsync(async (req, res, next, Model, options) => {
-  if (options) {
-    const features = new APIFeatures(req.query, Model)
-      .filter()
-      .field()
-      .sort()
-      .pagination();
-    const data = await features.dbQuery.find().populate(options);
-    response(res, 200, data);
-  } else {
-    const features = new APIFeatures(req.query, Model)
-      .filter()
-      .field()
-      .sort()
-      .pagination();
-    const data = await features.dbQuery.find();
-    response(res, 200, data);
-  }
+  const features = new APIFeatures(req.query, Model)
+    .filter()
+    .field()
+    .sort()
+    .pagination();
+  const data = await features.dbQuery;
+  response(res, 200, data);
 });
 
 exports.getOne = catchErrorAsync(async (req, res, next, Model) => {

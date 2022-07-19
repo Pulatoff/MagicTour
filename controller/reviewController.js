@@ -1,49 +1,29 @@
 const Review = require("../model/reviewModel");
 const AppError = require("../helper/appError");
 const catchErrorAsync = require("../helper/catchAsync");
+const handler = require("./handlerController");
 
-exports.getAllReviews = catchErrorAsync(async (req, res, next) => {
+exports.getAllReviews = (req, res, next) => {
+  let modelReview;
   if (!req.params.id) {
-    const reviews = await Review.find()
-      .populate({
-        path: "user",
-        select: "name",
-      })
-      .populate({
-        path: "tour",
-        select: "name",
-      });
-    res.status(200).json({
-      status: "success",
-      data: review,
-    });
+    modelReview = Review.find({ tour: req.params.id });
   } else {
-    const data = await Review({ tour: req.params.id });
-    res.status(200).json({
-      status: "success",
-      results: data.length,
-      data,
-    });
+    modelReview = Review;
   }
-});
+  handler.getAll(req, res, next, modelReview, "tour");
+};
 
-exports.addReview = catchErrorAsync(async (req, res, next) => {
-  if (!req.params.id) {
-    const review = await Review.create(req.body);
-    res.status(200).json({
-      status: "success",
-      data: review,
-    });
-  } else {
-    const tourId = req.params.id;
-    const review = await Review({
-      review: req.body.review,
-      rating: req.body.rating,
-      tour: tourId,
-      user: req.body.user,
-    });
-    res.status(201).json({
-      data: review,
-    });
-  }
-});
+exports.addReview = (req, res, next) => {
+  handler.getAll(req, res, next, Review, "tour");
+};
+
+exports.updateReview = (req, res, next) => {
+  handler.update(req, res, next, Review);
+};
+exports.deleteReview = (req, res, next) => {
+  handler.delete(req, res, next, Review);
+};
+
+exports.getOneReview = (req, res, next) => {
+  handler.getOne(req, res, next, Review);
+};
