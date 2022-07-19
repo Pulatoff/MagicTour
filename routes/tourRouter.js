@@ -1,7 +1,7 @@
 const express = require("express");
-const tourRouter = express.Router();
+const tourRouter = express.Router({ mergeParams: true });
 const tourController = require("../controller/tourController");
-
+const reviewRoute = require("./reviewRouter");
 tourRouter
   .route("/")
   .get(tourController.getAllTours)
@@ -18,6 +18,8 @@ tourRouter.use(
 );
 
 tourRouter.route("/stats").get(tourController.tourStats);
+
+tourRouter.use("/:id/reviews", reviewRoute);
 
 tourRouter
   .route("/:id")

@@ -1,6 +1,7 @@
 const tourModel = require("../model/tourModel");
 const FeaturiesAPI = require("../helper/APIFeatures");
 const catchErrorAsync = require("../helper/catchAsync");
+const Review = require("../model/reviewModel");
 
 const getAllTours = catchErrorAsync(async (req, res) => {
   let allQuery = new FeaturiesAPI(req.query, tourModel)
