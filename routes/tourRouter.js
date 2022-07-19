@@ -17,8 +17,6 @@ tourRouter.use(
   tourController.getAllTours
 );
 
-tourRouter.route("/stats").get(tourController.tourStats);
-
 tourRouter.use("/:id/reviews", reviewRoute);
 
 tourRouter
